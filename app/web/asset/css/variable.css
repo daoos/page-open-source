@@ -1,0 +1,15 @@
+:root {
+    --color-red: #ff5e69;
+    --color-blue: #20A0FF;
+    --color-green: #47cc5e;
+    --color-black: #333;
+    --color-dark: #545c64;
+    --color-lightblack: #888;
+    --color-gray: #ddd;
+    --color-mask: rgba(#000, 0.4);
+    --color-bg: #f7f5f5;
+    --margin-small:calc(6*2px);
+    --margin-middle:calc(10*2px);
+    --margin:calc(15*2px);
+    --margin-big:calc(18*2px);
+}

@@ -1,0 +1,47 @@
+
+.mtsm{
+    margin-top:var(--margin-small);
+}
+.mbsm{
+    margin-bottom:var(--margin-small);
+}
+.mtbsm{
+    margin:var(--margin-small) 0;
+}
+.mlsm{
+    margin-left:var(--margin-small) 0;
+}
+.text-right{
+    text-align:right;
+}
+
+.button-nav {
+  padding: 10px 5px 0;
+  box-shadow: 0 0 10px grey;
+  border-radius: 4px;
+  position: absolute;
+  background-color: #fff;
+  right: 0;
+  text-align: center;
+  z-index: 101;
+}
+
+.button-nav div {
+  margin-bottom: 10px;
+}
+
+.button-nav .box {
+  font-size:21px;
+  color:var(--color-lightblack);
+}
+
+.button-nav .remove {
+  font-size: 15px;
+}
+
+.button-nav .box {
+  font-size:21px;
+  cursor:pointer;
+  color:var(--color-lightblack);
+}
+
