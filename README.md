@@ -1,442 +1,157 @@
-# egg-vue-webpack-boilerplate
+## vue+egg+easywebpack页面配置平台开源手册
+本平台为基于[egg](4)全栈功能、[easywebpack](5)配置和[vue](6)动态组件功能的动态页面配置系统。该系统可完成h5（甚至pc）页面的动态配置，支持个性化组件设计。高度一体化，只需维护个性化的组件。
 
-基于 Egg + Vue + Webpack4 多页面和单页面服务端客户端渲染同构工程骨架项目.
+旨在解放前端大量重复的简单交互页面的编写工作，提高运营人员配置页面的自由度，节省人力，提高效率。常用于落地页快速生成、h5文章快速编写等等。
+### 快速开始
 
-## 纯净版
+1.本项目以mongodb作为数据库，所以需要先行安装mongodb（安装方式自行google）。
+这里给几个安装教程（最好将monogod命令加入环境变量）
+- [mac 下用 brew 安装mongodb](1)
+- [Mac OSX 平台安装 MongoDB](2)
+- [windows下面安装mongodb](3)
+- 
 
-因该项目包含了多种实现, 提供多种例子实现，为防干扰, 特提供了两个纯净版本分支用于实际项目开发, 请自行选用。
+2. 启动mongo
 
-- Egg2 + Vue2 + Axios 多页面服务端渲染分支 [feature/green/multi](https://github.com/hubcarl/egg-vue-webpack-boilerplate/tree/feature/green/multi)
-- Egg2 + Vue2 + vue-router + vuex + axios 单页面服务端渲染分支 [feature/green/spa](https://github.com/hubcarl/egg-vue-webpack-boilerplate/tree/feature/green/spa)
+启动前我的习惯是能看到启动反馈,先看配置文件
+```
+// mongod.conf
+systemLog:
+  destination: file
+  path: /data/db/log/mongodb/mongo.log
+  logAppend: true
+storage:
+  dbPath: /data/db/mongodb
+net:
+  bindIp: 127.0.0.1
+security:
+  authorization: "disabled"
+processManagement:
+   fork: true // fork 启动进程
 
-
-## 版本
-
-- Egg 版本： ^2.x.x
-- Node 版本: Node ^8.x.x+,  Node 6.x.x 版本请见 [Egg 1.0 + Node6分支](https://github.com/hubcarl/egg-vue-webpack-boilerplate/tree/node6)
-- Webpack 版本: ^4.x.x, 对应 `easywebpack-vue` 版本为 ^4.x.x; Webpack3 版本项目骨架请见 `webpack3` 分支, 对应 `easywebpack-react` 版本为 3.x.x
-- Vue 版本: ^2.5.0
-
-## 说明 
-
-- Egg + TypeScript 已初步支持， 包括 Node 端 typescript 编写 和 前端 TypeScript编写, 具体请见(https://github.com/hubcarl/egg-vue-typescript-boilerplate)项目
-- 项目开发之前, 请阅读[Egg + Vue 服务端渲染开发指南](https://zhuanlan.zhihu.com/p/30445536) 和 [Egg + Vue 服务端渲染工程化实现](https://zhuanlan.zhihu.com/p/29838551)
-- 版本变更情况请看发布版本说明[RELEASE](RELEASE.md) 
-- 如果你需要了解 Egg+Vue+Webpack 项目更多信息，请扫以下二维码加好友，请备注：Node.js
-
-![hubcarl](https://avatars3.githubusercontent.com/u/4983042?v=4&u=0befb64a57a7911c630b7f97df5632385b08da2a&s=250)
-
-## 文档
-
-- http://hubcarl.github.io/easywebpack/vue/rule
-- https://zhuanlan.zhihu.com/easywebpack
-
-
-## 1.特性
-
-- 支持服务端渲染, 前端渲染, 静态页面渲染三种方式,
-
-- 支持单页面, 多页面服务端渲染, 前端渲染模式
-
-- 支持 server 和 client 端代码修改, webpack 时时编译和热更新, `npm start` 一键启动应用
-
-- 基于 vue + axios 多页面服务端渲染, 客户端渲染同构实现
-
-- 基于 vue + vuex + vue-router + axios 单页面服务器客户端同构实现
-
-- 基于 easywebpack 基础配置, 使用 es6 class 继承方式编写webpack配置 和 cli 构建
-
-- 支持开发环境, 测试环境，正式环境 webpack 编译
-
-- 支持 js/css/image 资源依赖, 内置支持CDN特性
-
-- 支持 css/sass/less 样式编写
-
-- 支持根据 .vue 文件自动创建 webpack entry 入口文件
-
-- 开始支持多进程编译
-
-- 支持 webpack dll 自动化构建, 与多进程编译结合，构建速度减少 2/3
-
-- 支持Vue组件异步加载, 具体实例请看[app/web/page/dynamic](app/web/page/dynamic)
-
-- Node 8 版本的async和await特性, Controller 采用 class 方式编写
-
-- 支持 service worker 构建和使用
-
-
-## 2.依赖
-
-- [easywebpack](https://github.com/hubcarl/easywebpack) ^4.x.x
-- [easywebpack-vue](https://github.com/hubcarl/easywebpack) ^4.x.x
-- [egg-view-vue-ssr](https://github.com/hubcarl/egg-view-vue-ssr) ^3.x.x
-- [egg-webpack](https://github.com/hubcarl/egg-webpack) ^3.x.x
-- [egg-webpack-vue](https://github.com/hubcarl/egg-webpack-vue) ^2.x.x
-
-
-## 3. 使用
-
-#### 3.1 安装cli(非必需)
-
-```bash
-npm install easywebpack-cli -g
 ```
 
-^3.5.0 开始， `easywebpack-cli` 已内置 `devDependencies` 中, 无需安装。如果你需要在命令行使用 `easy` 命令, 可以单独全局安装。
+启动mongod后台服务
+```
+$ mongod （没有权限需要加sudo）
+// 输出
+$ 2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] MongoDB starting : pid=96618 port=27017 dbpath=/data/db 64-bit host=MacBookPro.local
+2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] db version v3.4.9
+2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] git ....
 
-#### 3.2 安装依赖
+在浏览器输入127.0.0.1:2:27017
+出现
 
-```bash
+It looks like you are trying to access MongoDB over HTTP on the native driver port.
+即可
+```
+
+启动mongo前台服务
+```
+$ mongo
+MongoDB shell version v3.4.9
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 3.4.9
+>
+
+```
+
+3. 初始化
+
+```
 npm install
+or yarn install（推荐）
 ```
+4. 启动
 
-
-#### 3.3 本地开发启动应用
-
-```bash
+```
+// 本地启动
 npm run dev
-```
 
-应用访问: http://127.0.0.1:7001
+// 发布上线
+npm run build  // 构建代码
+npm start      // 启动端口服务
+(or pm2 维护)
 
-![npm start启动](https://github.com/hubcarl/egg-vue-webpack-boilerplate/blob/master/docs/images/webpack-build.png)
-
-
-#### 3.4 发布模式启动应用
-
-- 首先在本地或者ci构建好jsbundle文件
-
-```bash
-npm run build 
-```
-
-- 然后,启动应用
-
-```bash
+// 重启
+npm stop （or npm run kill-mac 该命令直接杀死进程）
 npm start 
+
 ```
-
-
-详细打包部署请见： http://hubcarl.github.io/easywebpack/vue/dev/
-
-## 4. 配置说明(支持三种方式)
-
-#### 4.1 方式一: `easywebpack-cli` 根据  `webpack.config.js` 自动创建Webpack Config 
-
-```js
-`config/config.local.js` 
-const EasyWebpack = require('easywebpack-vue');
-exports.webpack = {
-    webpackConfigList:EasyWebpack.getWebpackConfig() 
-  };
+ps：monogo的配置
 ```
-
-#### 4.2 方式二: 自己编写Webpack配置
-
-编写配置请见 tag `1.0.0`  build目录代码实现
-
-```js
-`config/config.local.js` 
-exports.webpack = {
-    webpackConfigList: [
-      require(path.join(app.baseDir, 'build/client')), // http://127.0.0.1:9000
-      require(path.join(app.baseDir, 'build/server')), // http://127.0.0.1:9001
-    ]
-  };
-```
-
-#### 4.3 方式三: 开启多进程编译
-
-[egg npm start 启动开启多进程编译](http://hubcarl.github.io/easywebpack/vue/version/)
-
-
-构建会同时启动两个 webpack 构建服务, 客户端js构建(build/client), 服务端构建(build/server), 默认端口9000,  webpackConfigList 端口依次递增. 
-
-
-## 5. 项目结构和基本规范
-
-    ├── app
-    │   ├── controller
-    │   │   ├── test
-    │   │   │   └── test.js
-    │   ├── extend
-    │   ├── lib
-    │   ├── middleware
-    │   ├── mocks
-    │   ├── proxy
-    │   ├── router.js
-    │   ├── view
-    │   │   ├── about                         // 服务器编译的jsbundle文件
-    │   │   │   └── about.js
-    │   │   ├── home
-    │   │   │     └── home.js                 // 服务器编译的jsbundle文件
-    │   │   └── layout                        // 用于根据指定的layout生成对应的html页面, 用于服务器渲染失败时,采用客户端渲染
-    │   │       └── layout.html
-    │   └── web                               // 前端工程目录
-    │       ├── asset                         // 存放公共js,css资源
-    │       ├── framework                     // 前端公共库和第三方库
-    │       │   ├── fastclick
-    │       │   │   └── fastclick.js
-    │       │   ├── sdk
-    │       │   │   ├── sdk.js
-    │       │   ├── storage
-    │       │   │   └── storage.js
-    │       │   └── vue                           // 与vue相关的公开代码
-    │       │       ├── app.js                    // 前后端调用入口, 默认引入componet/directive/filter
-    │       │       ├── component.js              // 组件入口, 可以增加component目录,类似下面的directive
-    │       │       ├── directive                 // directive 目录,存放各种directive组件
-    │       │       ├── directive.js              // directive引用入口
-    │       │       └── filter.js                 // filter引用入口
-    │       ├── page                              // 前端页面和webpack构建目录, 也就是webpack打包配置entryDir
-    │       │   ├── home                          // 每个页面遵循目录名, js文件名, scss文件名, vue文件名相同
-    │       │   │   ├── home.scss
-    │       │   │   ├── home.vue
-    │       │   │   ├── images                    // 页面自有图片,公共图片和css放到asset下面
-    │       │   │   │   └── icon_more.png
-    │       │   │   └── w-week                    // 页面自有组件,公共组件放到widget下面
-    │       │   │       ├── w-week.scss
-    │       │   │       └── w-week.vue
-    │       │   └── test                          // 每个页面遵循目录名, js文件名, scss文件名, vue文件名相同
-    │       │       └── test.vue
-    │       ├── store                             // 引入vuex 的基本规范, 可以分模块
-    │       │   ├── app
-    │       │   │   ├── actions.js
-    │       │   │   ├── getters.js
-    │       │   │   ├── index.js
-    │       │   │   ├── mutation-type.js
-    │       │   │   └── mutations.js
-    │       │   └── store.js
-    │       └── component                         // 公共业务组件, 比如loading, toast等, 遵循目录名, js文件名, scss文件名, vue文件名相同
-    │           ├── loading
-    │           │   ├── loading.scss
-    │           │   └── loading.vue
-    │           ├── test
-    │           │   ├── test.vue
-    │           │   └── test.scss
-    │           └── toast
-    │               ├── toast.scss
-    │               └── toast.vue
-    ├── build                                   //  webpack 自定义配置入口, 会与默认配置进行合并(看似这么多,其实这里只是占个位说明一下)
-    │   ├── base
-    │   │   └── index.js                        // 公共配置        
-    │   ├──  client                             // 客户端webpack编译配置
-    │   │   ├── dev.js
-    │   │   ├── prod.js
-    │   │   └── index.js
-    │   ├──  server                             // 服务端webpack编译配置
-    │   │    ├── dev.js
-    │   │    ├── prod.js
-    │   │    └── index.js
-    │   └── index.js
-    ├── config
-    │   ├── config.default.js
-    │   ├── config.local.js
-    │   ├── config.prod.js
-    │   ├── config.test.js
-    │   └── plugin.js
-    ├── doc
-    ├── index.js
-    ├── public                                 // webpack编译目录结构, render文件查找目录
-    │   ├── manifest.json                      // 资源依赖表
-    │   ├── static
-    │   │   ├── css
-    │   │   │   ├── home
-    │   │   │   │   ├── home.07012d33.css
-    │   │   │   └── test
-    │   │   │       ├── test.4bbb32ce.css
-    │   │   ├── img
-    │   │   │   ├── change_top.4735c57.png
-    │   │   │   └── intro.0e66266.png
-    │   ├── test
-    │   │   └── test.js
-    │   └── vendor.js                         // 生成的公共打包库
-
-
-## 6. 功能实现
-
-支持多页面/单页面服务端渲染, 前端渲染, 静态页面三种方式.
-
-
-### 6.1 多页面服务端渲染/前端渲染同构实现
-
-#### 6.1.1 多页面前端页面实现
-
-在app/web/page 目录下面创建home目录, home.vue 文件, Webpack自动根据.vue文件创建entry入口, 具体实现请见[webpack.config.js](webpack.config.js)
-
-- home.vue 编写界面逻辑, 根元素为layout(自定义组件, 全局注册, 统一的html, meta, header, body)
-
-```html
-<template>
-  <layout title="基于egg-vue-webpack-dev和egg-view-vue插件的工程示例项目" description="vue server side render" keywords="egg, vue, webpack, server side render">
-   {{message}}
-  </layout>
-</template>
-<style>
-  @import "home.css";
-</style>
-<script type="text/babel">
-
-  export default {
-    components: {
-
-    },
-    computed: {
-
-    },
-    methods: {
-
-    },
-    mounted() {
-
+// config/config.local.js
+exports.mongoose = {
+    client: {
+      url: 'mongodb://127.0.0.1:27017/pages',
+      options: {},
     }
-  }
-</script>
+  };
+ 
+ 也可以配置账号登陆
+ options:{
+     user: 'xxx', pass: 'xxxx'
+ }
+/// http://mongoosejs.com/docs/api.html#mongoose_Mongoose-createConnection
 ```
+### 目录结构
 
-
-#### 6.1.2 多页面后端渲染实现, 通过 `egg-view-vue-ssr` 插件 `render` 方法实现
-  
-- 创建controller文件home.js
-
-```javascript
-exports.index = function* (ctx) {
-  yield ctx.render('home/home.js', { message: 'vue server side render!' });
-};
+目录结构都是按照hubcarl的easywebpack-vue[项目](7)来的,阅读本项目前建议先看以上项目的目录结构。这里只大体解释自定义目录。
 ```
+|--app
+    |--controller              // 路由控制器
+        |--admin.js            // 首页和新建页面controller，客户端渲染，可在此页面配置登陆权限，这里不展开登陆中间件
+        |--page.js             // 对外开放页面 路径是/p/:pid 
+        |--pages_api.js        // 页面所需后台服务api，restFul格式
+    |--model
+        |--pages.js            // mongoose结构定义 Schema都在这里做
 
-- 添加路由配置
+    |--services               // 服务层，controller的补充，可定制各种后台服务
+        |--pages.js           // 定义了pages的后台服务
+    |--router.js              // 前端与controller对应的路由路径
+    |--web
+        |--page               // 项目页面
+            |--admin          // 单页应用admin,有登陆权限要获取用户信息用spa比较方便
+                |--main.js    // spa需自己写vue-router等,脱离项目外层路由（router.js）
+                |--admin.vue  // admin主页面
+                |--pages
+                    |--list.vue   // 列表页面，admin子路由器页面
+                    |--newpage.vue  // 新建页面 admin子路由器页面
+            |--p
+                |——index    // 对外公开页面
+    |--components           
+        |-- activity          // 动态组件维护目录
+            |--edit           // 组件属性编辑目录 
+                |--pImg.vue   // 当前有两个组件，每个组件都有edit（编辑）、preview(预览)、publish（发布）三种组件，
+                |--txt.vue    // 根据名字查找对应的组件（意思三种组件名字必须一一对应）
+            |--preview
+                |--pImg.vue
+                |--txt.vue
+            |--publish
+                |--pImg.vue
+                |--txt.vue
+            |-- defaultSetting.js  // 配置组件初始化属性，每增加一个组件需在该文件数组中添加一个组件初始化信息
 
-```javascript
-app.get('/home', app.controller.home.home.index);
-```
-
-#### 6.1.3 多页面走前端渲染(后端路由)实现, 通过 `egg-view-vue-ssr` 插件 `renderClient` 方法实现  
-
-- 创建controller文件home.js
-
-```javascript
-exports.client = function* (ctx) {
-  yield ctx.renderClient('home/home.js', { message: 'vue server side render!' });
-};
-```
-
-- 添加路由配置
-
-```javascript
-app.get('/client', app.controller.home.home.client);
-```
-
-#### 6.1.4 HTML静态页面前端渲染
-
-- 直接有easywebpack构建出静态HTML文件, 请见 `webpack.config.js` 配置和 `app/web/page/html`代码实现
-
-- 通过 `egg-static` 静态文件访问HTML文件
-
-
-### 6.2 单页面服务器渲染同构实现
-
-#### 6.2.1 单页面前端实现
-
-在app/web/page 目录下面创建app目录, app.vue, app.js 文件.
-
-- app.vue 编写界面逻辑, 根元素为layout(自定义组件, 全局注册, 统一的html, meta, header, body)
-
-```html
-<template>
-  <app-layout>
-    <transition name="fade" mode="out-in">
-      <router-view></router-view>
-    </transition>
-  </app-layout>
-</template>
-<style lang="sass">
-
-</style>
-<script type="text/babel">
-  export default {
-    computed: {
-
-    },
-    mounted(){
-
-    }
-  }
-</script>
-```
-
-- app.js 页面调用入口
-
-```javascript
-import { sync } from 'vuex-router-sync';
-import store from 'store/app';
-import router from 'component/app/router';
-import app from './app.vue';
-import App from 'app';
-import Layout from 'component/layout/app';
-
-App.component(Layout.name, Layout);
-
-sync(store, router);
-
-export default App.init({
-  base: '/app',
-  ...app,
-  router,
-  store
-});
+.... 其他的目录结构就不解释了，跟hubcarl的项目差不多
 
 ```
-
-#### 6.2.2 单页面后端实现
-
-- 创建controller文件app.js
-
-```javascript
-exports.index = function* (ctx) {
-  yield ctx.render('app/app.js', { url: this.url.replace(/\/app/, '') });
-};
-```
-
-- 添加路由配置
-
-```javascript
-  app.get('/app(/.+)?', app.controller.app.app.index);
-```
+### 动态组件配置原理
+这里主要解释`components/activity`的三个文件夹和`defaultSetting.js`的作用
+![page-reason](http://8pig-file.oss-cn-shenzhen.aliyuncs.com/page/page-reason.png)
 
 
-## 7. 工程实例
+其他的可以参考系列文章
+1. [基于vue的动态组件配置系统设计一：vue的动态组件的妙用](https://segmentfault.com/n/1330000012755580)
+2. [基于vue的动态组件配置系统设计二：设计思路与实现](https://segmentfault.com/n/1330000012895094)
 
 
-- 基于vue + axios 多页面服务器客户端同构入口: http://127.0.0.1:7001
+有不明白的，可以加qq留言 584196757
 
-![多页面服务器渲染](https://github.com/hubcarl/egg-vue-webpack-boilerplate/blob/master/docs/images/vue-mutil-page.png)
+[1]:http://yijiebuyi.com/blog/b6a3f4a726b9c0454e28156dcc96c342.html
+[2]:http://www.runoob.com/mongodb/mongodb-osx-install.html
+[3]:http://www.haorooms.com/post/window_install_mongo
 
-
-- 基于vue + vuex + vue-router + axios 单页面服务器客户端同构入口: http://127.0.0.1:7001/app
-
-![单页面服务器](https://github.com/hubcarl/egg-vue-webpack-boilerplate/blob/master/docs/images/vue-single-page.png)
-
-
-## 8. 实现原理
-
-### 8.1 本地`npm start`启动流程
-
-![本地启动流程](http://hubcarl.github.io/img/webpack/npm-start.png)
-
-### 8.2 服务端渲染页面访问流程
-
-![服务端渲染页面访问流程](http://hubcarl.github.io/img/webpack/egg-webpack-vue-ssr.png)
-
-
-### 8.3 详细资料
-
-- [Egg+Vue解决方案开发流程](http://hubcarl.github.io/easywebpack/vue/dev/)
-
-- [基于webpack的前端工程解决方案和egg+vue服务端渲染项目实践](http://hubcarl.github.io/blog/2017/04/15/webpack-project/)
-
-- [koa和egg项目webpack内存编译和热更新实现](http://hubcarl.github.io/blog/2017/04/15/egg-webpack/)
-
-
-## License
-
-[MIT](LICENSE)
+[4]:https://eggjs.org/zh-cn/
+[5]:http://hubcarl.github.io/easywebpack/
+[6]:https://cn.vuejs.org/
+[7]:https://github.com/hubcarl/egg-vue-webpack-boilerplate
