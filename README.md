@@ -38,6 +38,7 @@ $ mongod （没有权限需要加sudo）
 $ 2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] MongoDB starting : pid=96618 port=27017 dbpath=/data/db 64-bit host=MacBookPro.local
 2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] db version v3.4.9
 2018-06-01T14:45:32.407+0800 I CONTROL  [initandlisten] git ....
+2018-06-01T14:45:32.407+0800 I NETWORK  [thread1] waiting for connections on port 27017
 
 在浏览器输入127.0.0.1:2:27017
 出现
@@ -120,7 +121,7 @@ exports.mongoose = {
             |--p
                 |——index    // 对外公开页面
     |--components           
-        |-- activity          // 动态组件维护目录
+        |-- module          // 动态组件维护目录
             |--edit           // 组件属性编辑目录 
                 |--pImg.vue   // 当前有两个组件，每个组件都有edit（编辑）、preview(预览)、publish（发布）三种组件，
                 |--txt.vue    // 根据名字查找对应的组件（意思三种组件名字必须一一对应）
@@ -136,7 +137,7 @@ exports.mongoose = {
 
 ```
 ### 动态组件配置原理
-这里主要解释`components/activity`的三个文件夹和`defaultSetting.js`的作用
+这里主要解释`components/module`的三个文件夹和`defaultSetting.js`的作用
 ![page-reason](http://8pig-file.oss-cn-shenzhen.aliyuncs.com/page/page-reason.png)
 
 
@@ -146,6 +147,53 @@ exports.mongoose = {
 
 
 有不明白的，可以加qq留言 584196757
+
+#### 常见问题
+
+1. webpack插件添加方式
+
+```
+// webpack.config.jg
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+...
+plugins:{
+analyzer:{
+      enable:false,
+      env:['dev'],
+      name: new BundleAnalyzerPlugin(options)
+    },
+  // options-- 可选
+}
+
+```
+2. vue ssr渲染：window is not defined
+```
+前端解决方案：
+https://zhuanlan.zhihu.com/p/36233639
+
+npm插件解决方案（如vconsole）
+
+在页面中用require和typeof(或EASY_ENV_IS_BROWSER)组合饮用
+
+如：
+if (typeof window === 'object'){
+    const VConsole = require('vconsole')
+    new VConsole()
+}
+
+ // typeof window === 'object' 等效 EASY_ENV_IS_BROWSER
+```
+
+3. js跨域请求 ‘String Error’
+```
+其实在vuessr渲染的时候可以添加crossorigin配置项，在引入的js中会自动添加crossorigin=anonymous的标示
+
+// config.default.js
+exports.vuessr = {
+  crossorigin:true  
+}
+```
+3. 
 
 [1]:http://yijiebuyi.com/blog/b6a3f4a726b9c0454e28156dcc96c342.html
 [2]:http://www.runoob.com/mongodb/mongodb-osx-install.html
