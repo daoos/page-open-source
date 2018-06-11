@@ -41,7 +41,7 @@ module.exports = app => {
       if (!request) { return; }
       const { app, ctx } = this;
       const result = await ctx.model.Pages.create(request);
-      console.log('create--',result)
+      // console.log('create--',result)
 	    result.ret = 0;
       result.data = result;
       return result;
@@ -56,7 +56,6 @@ module.exports = app => {
       if(ifExist){
         result.data = await ctx.model.Pages.remove({ pid: { $in: params.id.split(',') } });
         // 删除缓存
-        app.disconf.removeCache(pid);
         result.ret = 0
         result.retMsg = '删除成功'
       } else {

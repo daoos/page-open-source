@@ -13,7 +13,7 @@ import Layout from "layout/mobile";
 import App from "app";
 App.component(Layout.name, Layout);
 
-import componentList from "component/activity/defaultSetting";
+import componentList from "component/module/defaultSetting";
 
 function createComponents(list, path, type) {
   if (Object.prototype.toString.call(list) !== "[object Array]")
@@ -24,7 +24,7 @@ function createComponents(list, path, type) {
     let showname = name;
     if (!!type) showname = type + "-" + name;
     components[showname] = () =>
-      import(`../../component/activity/${path}${name}.vue`);
+      import(`../../component/module/${path}${name}.vue`);
   });
   return components;
 }

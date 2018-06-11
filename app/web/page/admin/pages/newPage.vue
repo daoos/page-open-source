@@ -95,7 +95,7 @@
 </template>
 
 <script type="text/babel">
-import componentList from "component/activity/defaultSetting";
+import componentList from "component/module/defaultSetting";
 import { deepCopy, date, getCsrf, formateDate } from "common/tool";
 import { DOMAIN, API_DOMAIN, API_PATH } from "common/conf";
 import axios from "axios";
@@ -111,7 +111,7 @@ function createComponents(list, path, type) {
     let showname = name;
     if (!!type) showname = type + "-" + name;
     components[showname] = () =>
-      import(`../../../component/activity/${path}${name}.vue`); // 动态引入
+      import(`../../../component/module/${path}${name}.vue`); // 动态引入
   });
   return components;
 }
@@ -124,7 +124,8 @@ const defaultVar = {
 
 export default {
   beforeRouteEnter: (to, from, next) => {
-    const pid = to.params.pid;
+    const cpPid = to.query.copyFrom;
+    const pid = to.params.pid || cpPid;
     next(vm => {
       document.getElementsByClassName('meau-ul')[0].style.display = 'none'
       document.getElementsByClassName('operation-view')[0].style.width = '100%'
@@ -134,10 +135,14 @@ export default {
           // console.log(data)
           if(data.ret == 0){
             //success..
-            vm.viewList = data.data.comps
-            vm.dbData.title = data.data.title || ''
-            vm.isNew = false
-            vm.dbData.pid = pid
+            if (!cpPid) {
+              vm.viewList = data.data.comps
+              vm.dbData.title = data.data.title || ''
+              vm.isNew = false
+              vm.dbData.pid = pid
+            } else {
+              vm.viewList = data.data.comps
+            }
           }
         })
       }else{
@@ -326,12 +331,6 @@ export default {
         <div style="text-align:center">
         <a href="${DOMAIN}p/${pid}" target="_blank">${DOMAIN}p2/${pid}</a>
         </div>
-        <div>
-        PC版请访问：
-        </div>
-        <div style="text-align:center">
-        <a href="${DOMAIN}pc/${pid}" target="_blank">${DOMAIN}pc/${pid}</a>
-        </div>
         `, "页面生成提醒", {
         // confirmButtonText: "立刻访问",
         dangerouslyUseHTMLString: true,
@@ -350,22 +349,6 @@ export default {
       }
        if (!(/^([a-z_A-Z-.0-9]+)$/gi.test(this.dbData.pid))) {
         return alert("请填写或者更换页面标识,标识可为数字，字母，短横线和下划线组合而成，每个标识必须唯一");
-      }
-      this.dbData.tags = []
-      this.tagsOption.forEach((item)=>{
-        if(item.isAct){
-          this.dbData.tags.push(item.value)
-        }
-      })
-      if (this.sem && this.dbData.tags.indexOf('落地页') < 0) {
-        this.dbData.tags.push('落地页')
-      }
-      let _dynamic = false
-      for (let i = 0; i < this.viewList.length; i++) {
-        if (this.viewList[i].name === 'tag') {
-          _dynamic = true
-          break
-        }
       }
       const opt = {
         pid: this.dbData.pid,
