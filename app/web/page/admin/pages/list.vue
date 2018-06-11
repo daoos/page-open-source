@@ -141,13 +141,7 @@
           H5版请访问：
           </div>
           <div style="text-align:center">
-          <a href="${DOMAIN}p2/${pid}" target="_blank">${DOMAIN}p2/${pid}</a>
-          </div>
-          <div>
-          PC版请访问：
-          </div>
-          <div style="text-align:center">
-          <a href="${DOMAIN}pc/${pid}" target="_blank">${DOMAIN}pc/${pid}</a>
+          <a href="${DOMAIN}p/${pid}" target="_blank">${DOMAIN}p/${pid}</a>
           </div>
           `,
           '点击链接访问',

@@ -17,3 +17,18 @@ export const formatProps = (props,defaultStr) => {
   }
   return result
 }
+
+export const createComponents = function (list, path, type) {
+    if (Object.prototype.toString.call(list) !== "[object Array]")
+      return alert("数据格式不正确");
+    const components = {};
+    list.map(function(element) {
+      const name = element.name;
+      let showname = name;
+      if (!!type) showname = type + "-" + name;
+      components[showname] = () =>
+        import(`component/module/${path}${name}.vue`); // 动态引入
+    });
+    return components;
+  }
+  
