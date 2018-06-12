@@ -1,4 +1,4 @@
-
+const tempStr = `
 <template>
   <!-- showEditWindow事件必须有 -->
     <div @click="showEditWindow">
@@ -57,3 +57,5 @@ export default {
 }
 </script>
 
+`
+module.exports = tempStr

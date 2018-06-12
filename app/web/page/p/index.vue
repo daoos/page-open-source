@@ -17,7 +17,7 @@ import componentList from "component/module/defaultSetting";
 import { createComponents } from "common/utils";
 
 export default {
-  components: createComponents(componentList, "pubilsh/"),
+  components: createComponents(componentList, "publish/"),
 };
 </script>
 <style scoped>

@@ -77,5 +77,19 @@ export default [
       borderColor: '#fff',
       borderStyle: 'solid'
     }
+  }      
+  ,{
+    name: 'default1',
+    props: {
+      msg: '在这里添加修改组建的默认属性',
+    }
   }
+        
+  ,{
+    name: 'test',
+    props: {
+      msg: '在这里添加修改组建的默认属性',
+    }
+  }
+        
 ]

@@ -78,6 +78,35 @@ npm start      // 启动端口服务
 npm stop （or npm run kill-mac 该命令直接杀死进程）
 npm start 
 
+
+```
+5. 添加自定义组件：
+```
+1. 在根目录下运行
+npm run add-comps
+> node ./commander add
+请输入组件名称(默认default1):
+
+输入组件名并确认
+
+2. 在app/web/component/module/defaultSetting.js
+找到最后一行如：
+,{
+    name: 'default1',
+    props: {
+        msg: '在这里添加修改组建的默认属性',
+    }
+}
+修改props中的属性为自定义是属性，属性修改参考txt组建的props
+
+3. 在/app/web/page/admin/page/newPage.vue中，找到
+
+<el-menu-item index="pImg" style="padding-left: 0;">
+    <img style="border: 1px solid #989393;" src="https://pic.8pig.com/img/pages/upload/WX20180418-1839422018-04-18285.png">
+    <p>图片组件(兼容pc)</p>
+</el-menu-item>
+复制以上代码，在页面上就能看到你的组建了
+
 ```
 ps：monogo的配置
 ```

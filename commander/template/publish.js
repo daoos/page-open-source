@@ -1,3 +1,4 @@
+const tempStr = `
 <template>
     <div>
         <!-- 发布代码的完整代码 -->
@@ -12,3 +13,6 @@
         },
     }
 </script>
+
+`
+module.exports = tempStr
